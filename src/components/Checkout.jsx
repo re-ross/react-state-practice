@@ -5,7 +5,7 @@ const STATUS = {
   IDLE: "IDLE",
   SUBMITTED: "SUBMITTED",
   SUBMITTING: "SUBMITTING",
-  COMPLETED: "COMPLTED",
+  COMPLETED: "COMPLETED",
 };
 
 // Declaring outside component to avoid recreation on each render
@@ -14,18 +14,18 @@ const emptyAddress = {
   country: "",
 };
 
-export default function Checkout({ cart, emptyCart }) {
+export default function Checkout({ cart, dispatch }) {
   const [address, setAddress] = useState(emptyAddress);
   const [status, setStatus] = useState(STATUS.IDLE);
   const [saveError, setSaveError] = useState(null);
   const [touched, setTouched] = useState({});
 
-  // derived state
+  // Derived state
   const errors = getErrors(address);
   const isValid = Object.keys(errors).length === 0;
 
   function handleChange(e) {
-    e.persist();
+    e.persist(); // persist the event
     setAddress((curAddress) => {
       return {
         ...curAddress,
@@ -35,6 +35,7 @@ export default function Checkout({ cart, emptyCart }) {
   }
 
   function handleBlur(event) {
+    event.persist();
     setTouched((cur) => {
       return { ...cur, [event.target.id]: true };
     });
@@ -46,7 +47,7 @@ export default function Checkout({ cart, emptyCart }) {
     if (isValid) {
       try {
         await saveShippingAddress(address);
-        emptyCart();
+        dispatch({ type: "empty" });
         setStatus(STATUS.COMPLETED);
       } catch (e) {
         setSaveError(e);
@@ -67,10 +68,11 @@ export default function Checkout({ cart, emptyCart }) {
   if (status === STATUS.COMPLETED) {
     return <h1>Thanks for shopping!</h1>;
   }
+
   return (
     <>
       <h1>Shipping Info</h1>
-      {!isValid && STATUS.SUBMITTED && (
+      {!isValid && status === STATUS.SUBMITTED && (
         <div role="alert">
           <p>Please fix the following errors:</p>
           <ul>
@@ -113,7 +115,7 @@ export default function Checkout({ cart, emptyCart }) {
           </select>
 
           <p role="alert">
-            {(touched.country || status === STATUS.SUBMITTED) && errors.city}
+            {(touched.country || status === STATUS.SUBMITTED) && errors.country}
           </p>
         </div>
 
