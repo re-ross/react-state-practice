@@ -6,6 +6,7 @@ import Products from "./components/Products";
 import { Route, Routes } from "react-router-dom";
 import Detail from "./components/Detail";
 import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 
 export default function App() {
   const [cart, setCart] = useState(() => {
@@ -38,6 +39,10 @@ export default function App() {
     });
   }
 
+  function emptyCart() {
+    setCart([]);
+  }
+
   return (
     <>
       <div className="content">
@@ -54,7 +59,10 @@ export default function App() {
               path="/cart"
               element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
-            <Route path="/checkout" element={<Checkout cart={cart} />} />
+            <Route
+              path="/checkout"
+              element={<Checkout cart={cart} emptyCart={emptyCart} />}
+            />
           </Routes>
         </main>
       </div>
