@@ -1,5 +1,5 @@
-import React, { useNavigate } from "react";
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import useFetchAll from "../services/useFetchAll";
 import Spinner from "../Spinner";
 
