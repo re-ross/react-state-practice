@@ -54,6 +54,7 @@ export default function App() {
               path="/cart"
               element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
+            <Route path="/checkout" element={<Checkout cart={cart} />} />
           </Routes>
         </main>
       </div>
